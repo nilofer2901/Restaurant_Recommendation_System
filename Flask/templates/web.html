@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search | Lumière Dining</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }, colors: { gold: { 400: '#facc15', 500: '#eab308' } } }
+            }
+        }
+    </script>
+    <style>
+        /* Invisible Input Styling (Luxurious underline only) */
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+            -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+            -webkit-transition-delay: 9999s;
+        }
+
+        /* Minimal Dropdown */
+        .autocomplete-items {
+            position: absolute;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #0f0f0f;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: none;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.8);
+        }
+        
+        .autocomplete-items div {
+            padding: 16px 0;
+            margin: 0 24px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            color: #a1a1aa;
+            transition: all 0.3s ease;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+        
+        .autocomplete-items div:last-child { border-bottom: none; }
+        .autocomplete-items div:hover { color: #fff; padding-left: 8px; }
+        .autocomplete-active { color: #facc15 !important; font-style: italic; font-family: 'Playfair Display', serif; font-size: 1.1rem !important; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-neutral-300 min-h-screen selection:bg-gold-500/30 selection:text-gold-400 overflow-hidden">
+
+    <div class="flex flex-col lg:flex-row h-screen w-full">
+        
+        <div class="hidden lg:block w-5/12 h-full relative">
+            <div class="absolute inset-0 bg-black/30 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Chef Plating" 
+                 class="w-full h-full object-cover grayscale-[30%]" />
+        </div>
+
+        <div class="w-full lg:w-7/12 h-full flex flex-col justify-between px-10 py-12 lg:px-24 lg:py-16 relative z-10 bg-[#0a0a0a]">
+            
+            <nav class="flex justify-end items-center">
+                <a href="/" class="text-xs tracking-[0.2em] uppercase font-medium text-neutral-500 hover:text-white transition-colors">Return Home</a>
+            </nav>
+
+            <main class="w-full max-w-xl mx-auto mt-10">
+                <h2 class="text-3xl lg:text-4xl font-serif text-white mb-4">Establishment <span class="italic text-gold-500">Query</span></h2>
+                <p class="text-sm text-neutral-500 mb-16 leading-relaxed font-light">Enter the name of your target restaurant. The engine will calculate cosine similarities across our matrix.</p>
+                
+                <form action="/result" method="POST" autocomplete="off" id="search-form" class="relative">
+                    
+                    <div class="relative group" id="autocomplete-container">
+                        <label for="output" class="block text-[0.65rem] font-semibold text-gold-500 uppercase tracking-[0.3em] mb-2 transition-all group-focus-within:text-white">Target Parameter</label>
+                        
+                        <input type="text" name="output" id="output" placeholder="Type a name to begin..." required
+                            class="block w-full py-4 bg-transparent border-b border-white/20 text-white text-2xl font-serif italic placeholder-neutral-700 focus:outline-none focus:border-gold-500 transition-colors">
+                        
+                        <div id="suggestions" class="autocomplete-items hidden"></div>
+                    </div>
+                    
+                    <button type="submit" class="mt-12 group inline-flex items-center gap-4 text-xs tracking-[0.2em] uppercase font-semibold text-neutral-400 hover:text-gold-400 transition-all duration-300">
+                        <span class="border-b border-transparent group-hover:border-gold-400 pb-1 transition-colors">Compute Vector</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </form>
+            </main>
+
+            <footer class="text-[0.65rem] tracking-[0.2em] uppercase text-neutral-600 text-right">
+                Designed & Developed by <span class="text-white">Abrar Kotwal.</span>
+            </footer>
+        </div>
+
+    </div>
+
+    <script>
+        const inputField = document.getElementById('output');
+        const suggestionsBox = document.getElementById('suggestions');
+        let currentFocus = -1; 
+
+        inputField.addEventListener('input', async function() {
+            const searchTerm = this.value;
+            currentFocus = -1; 
+
+            if (!searchTerm) { closeAllLists(); return; }
+
+            try {
+                const response = await fetch(`/autocomplete?term=${encodeURIComponent(searchTerm)}`);
+                const matches = await response.json();
+
+                closeAllLists();
+
+                if (matches.length > 0) {
+                    suggestionsBox.classList.remove('hidden');
+
+                    matches.forEach((match) => {
+                        const div = document.createElement('div');
+                        const regex = new RegExp(`(${searchTerm})`, "gi");
+                        div.innerHTML = match.replace(regex, "<strong class='text-white font-medium'>$1</strong>");
+                        
+                        div.addEventListener('click', function() {
+                            inputField.value = match;
+                            closeAllLists();
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+                }
+            } catch (error) { console.error("Error fetching suggestions:", error); }
+        });
+
+        inputField.addEventListener("keydown", function(e) {
+            let items = suggestionsBox.getElementsByTagName("div");
+            if (suggestionsBox.classList.contains('hidden') || items.length === 0) return;
+
+            if (e.keyCode == 40) { currentFocus++; addActive(items); scrollToItem(items); } 
+            else if (e.keyCode == 38) { currentFocus--; addActive(items); scrollToItem(items); } 
+            else if (e.keyCode == 13) { e.preventDefault(); if (currentFocus > -1 && items) items[currentFocus].click(); }
+        });
+
+        function addActive(items) {
+            if (!items) return false;
+            removeActive(items);
+            if (currentFocus >= items.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (items.length - 1);
+            items[currentFocus].classList.add("autocomplete-active");
+        }
+
+        function removeActive(items) { for (let i = 0; i < items.length; i++) { items[i].classList.remove("autocomplete-active"); } }
+        function scrollToItem(items) { if(items[currentFocus]) items[currentFocus].scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+        function closeAllLists() { suggestionsBox.innerHTML = ''; suggestionsBox.classList.add('hidden'); }
+        document.addEventListener('click', function(e) { if (e.target !== inputField) closeAllLists(); });
+    </script>
+</body>
+</html>

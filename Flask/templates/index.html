@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumière Dining | Premium Inference Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: { gold: { 400: '#facc15', 500: '#eab308', 600: '#ca8a04' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#0a0a0a] text-neutral-300 min-h-screen selection:bg-gold-500/30 selection:text-gold-400 overflow-hidden">
+
+    <div class="flex flex-col lg:flex-row h-screen w-full">
+        
+        <div class="w-full lg:w-5/12 h-full flex flex-col justify-between px-10 py-12 lg:px-16 lg:py-16 relative z-10 bg-[#0a0a0a]">
+            
+            <nav class="flex justify-between items-center">
+                <div class="text-xl font-serif tracking-widest text-white">
+                    Lumière <span class="italic text-gold-500">Dining</span>
+                </div>
+                <div class="space-x-6 hidden sm:block">
+                    <a href="/web" class="text-xs tracking-[0.2em] uppercase font-medium text-neutral-500 hover:text-gold-400 transition-colors">Access Engine</a>
+                </div>
+            </nav>
+
+            <main class="max-w-md">
+                <div class="inline-flex items-center gap-4 mb-8">
+                    <div class="h-[1px] w-8 bg-gold-500"></div>
+                    <span class="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-gold-500">TF-IDF NLP Algorithm</span>
+                </div>
+                
+                <h1 class="text-5xl lg:text-6xl font-serif text-white tracking-tight mb-8 leading-[1.1]">
+                    The Art of <br>
+                    <span class="italic font-light text-neutral-400">Culinary</span> Matching.
+                </h1>
+                
+                <p class="text-sm text-neutral-400 mb-12 leading-relaxed font-light tracking-wide">
+                    Elevate your gastronomic discovery. Our structural inference engine parses thousands of morphological data points to curate your absolute perfect dining experience.
+                </p>
+                
+                <a href="/web" class="group inline-flex items-center gap-4 text-xs tracking-[0.2em] uppercase font-semibold text-white hover:text-gold-400 transition-all duration-300">
+                    <span class="border-b border-white/30 group-hover:border-gold-400 pb-1 transition-colors">Initiate Sequence</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </main>
+
+            <footer class="text-[0.65rem] tracking-[0.2em] uppercase text-neutral-600">
+                &copy; 2026 Lumière Dining. <br class="sm:hidden">Designed & Developed by <span class="text-white">Abrar Kotwal</span>.
+            </footer>
+        </div>
+
+        <div class="hidden lg:block w-7/12 h-full relative">
+            <div class="absolute inset-0 bg-black/20 z-10"></div> <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Fine Dining" 
+                 class="w-full h-full object-cover grayscale-[20%]" />
+        </div>
+
+    </div>
+
+</body>
+</html>
