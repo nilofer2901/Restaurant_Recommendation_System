@@ -1,4 +1,3 @@
-```
 # 🍽️ Food Discovery | Smart Restaurant Recommendation System
 
 ![Python](https://img.shields.io/badge/Python-3.x-171717?style=flat-square&logo=python&logoColor=facc15)
@@ -26,89 +25,77 @@ The system uses **Natural Language Processing (NLP)** and **Machine Learning tec
 
 ## 📂 Project Structure
 
-```
-
-Food_Discovery/
+```text
+Restaurant_Recommendation_System/
 │
 ├── Dataset/
-│   └── zomato.csv.zip
+│   └── zomato.csv.zip                         # Compressed raw analytical dataset
 │
 ├── Document/
-│   └── FOOD_DISCOVERY_REPORT.docx
+│   └── RESTAURANT_RECOMMENDATION_SYSTEM.docx  # Final Project Report
 │
 ├── Model/
-│   └── Food_Discovery_Model.ipynb
+│   └── Restaurant_Recommendation_System.ipynb # Backup of analysis notebook
 │
 ├── Flask/
-│   ├── static/
+│   ├── static/                                # Compiled CSS/JS assets
 │   ├── templates/
-│   │   ├── index.html
-│   │   ├── web.html
-│   │   └── result.html
+│   │   ├── index.html                         # Editorial landing sequence
+│   │   ├── web.html                           # Auto-complete query interface
+│   │   └── result.html                        # Minimalist data output dashboard
 │   │
-│   ├── app1.py
-│   ├── zomato.csv
-│   ├── restaurant.pkl
-│   └── restaurant_cleaned.csv
+│   ├── app1.py                                # Main Flask Application Server
+│   ├── Restaurant_Recommendation_System.ipynb # Primary Training Script (EDA & Model)
+│   ├── zomato.csv                             # Extracted raw dataset
+│   ├── restaurant.pkl                         # Trained Model Matrix (Auto-generated)
+│   └── restaurant1.csv                        # Cleaned Dataset (Auto-generated)
 │
-├── requirements.txt
-└── README.md
-
-````
+├── requirements.txt               
+└── README.md  
+```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Initialization & Setup
 
-### 1. Install Dependencies
+### 1. Environment Preparation
+Ensure Python 3.x is installed on your system. Install all required dependencies using the provided requirements file:
 ```bash
 pip install -r requirements.txt
-````
+```
 
----
+### 2. Matrix Training (Jupyter Notebook)
+> **Note:** Before booting the web server, you must clean the raw dataset and generate the trained machine learning matrix.
 
-### 2. Train Model (Notebook)
+1. Extract `zomato.csv.zip` and ensure `zomato.csv` is located inside the `Flask/` directory.
+2. Open `Restaurant_Recommendation_System.ipynb` using Jupyter or VS Code.
+3. Execute all cells sequentially to perform Exploratory Data Analysis (EDA) and train the NLP model.
+4. Verify that `restaurant.pkl` and `restaurant1.csv` have successfully generated in your `Flask/` folder.
 
-* Extract `zomato.csv.zip`
-* Place dataset inside `Flask/` folder
-* Open `Food_Discovery_Model.ipynb`
-* Run all cells
-* Ensure `restaurant.pkl` is generated
-
----
-
-### 3. Run Flask App
-
+### 3. Server Deployment
+Start the local Flask server by executing the main application script:
 ```bash
 python app1.py
 ```
 
----
-
-### 4. Open in Browser
-
-```
+### 4. Access the Engine
+Open your preferred web browser and navigate to the local server address:
+```text
 http://127.0.0.1:5000/
 ```
 
 ---
 
-## 🧠 How It Works
+## 🧠 Algorithmic Workflow
 
-1. User enters a restaurant name or preference
-2. System converts text into numerical vectors using TF-IDF
-3. Cosine similarity is calculated between all restaurants
-4. Top matching restaurants are selected
-5. Results are displayed in a structured UI
-
----
-
-## 🎯 Objective
-
-The goal of **Food Discovery** is to simplify restaurant selection by providing intelligent, data-driven recommendations instead of random suggestions.
+1. **Target Parameterization:** As the user interacts with the UI, asynchronous requests ping the backend to suggest highly accurate target establishments.
+2. **Vector Computation:** Upon execution, the application loads `restaurant.pkl`, accessing a pre-computed matrix that compares the TF-IDF (Term Frequency-Inverse Document Frequency) weights of all semantic reviews.
+3. **Similarity Scoring:** The algorithm maps the index of the target parameter and computes the top closest culinary matches utilizing Cosine Similarity scoring.
+4. **Data Rendering:** The resulting Pandas DataFrame is dynamically parsed and injected into a custom HTML table, styled with Tailwind CSS for an elevated presentation.
 
 ---
 
-## 👩‍💻 Developer
+## 📝 Credits
 
-**Nilofar Shaikh**
+**Designed & Developed by Nilofar Shaikh**
+```
